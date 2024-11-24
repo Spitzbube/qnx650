@@ -91,28 +91,30 @@ typedef struct usbd_device_descriptor {
 	_Uint8t					bLength;
 	_Uint8t					bDescriptorType;
 	_Uint16t				bcdUSB;
-	_Uint8t					bDeviceClass;
-	_Uint8t					bDeviceSubClass;
-	_Uint8t					bDeviceProtocol;
-	_Uint8t					bMaxPacketSize0;
-	_Uint16t				idVendor;
-	_Uint16t				idProduct;
+	_Uint8t					bDeviceClass; //4
+	_Uint8t					bDeviceSubClass; //5
+	_Uint8t					bDeviceProtocol; //6
+	_Uint8t					bMaxPacketSize0; //7
+	_Uint16t				idVendor; //8
+	_Uint16t				idProduct; //10
 	_Uint16t				bcdDevice;
 	_Uint8t					iManufacturer;
 	_Uint8t					iProduct;
 	_Uint8t					iSerialNumber;
-	_Uint8t					bNumConfigurations;
+	_Uint8t					bNumConfigurations; //17
+	//18
 } usbd_device_descriptor_t;
 
 typedef struct usbd_configuration_descriptor {
-	_Uint8t					bLength;
-	_Uint8t					bDescriptorType;
-	_Uint16t				wTotalLength;
-	_Uint8t					bNumInterfaces;
-	_Uint8t					bConfigurationValue;
-	_Uint8t					iConfiguration;
-	_Uint8t					bmAttributes;
-	_Uint8t					MaxPower;
+	_Uint8t					bLength; //0
+	_Uint8t					bDescriptorType; //1
+	_Uint16t				wTotalLength; //2
+	_Uint8t					bNumInterfaces; //4
+	_Uint8t					bConfigurationValue; //5
+	_Uint8t					iConfiguration; //6
+	_Uint8t					bmAttributes; //7
+	_Uint8t					MaxPower; //8
+	//9
 } usbd_configuration_descriptor_t;
 
 typedef struct usbd_string_descriptor {
@@ -123,23 +125,25 @@ typedef struct usbd_string_descriptor {
 
 typedef struct usbd_interface_descriptor {
 	_Uint8t					bLength;
-	_Uint8t					bDescriptorType;
-	_Uint8t					bInterfaceNumber;
-	_Uint8t					bAlternateSetting;
-	_Uint8t					bNumEndpoints;
-	_Uint8t					bInterfaceClass;
-	_Uint8t					bInterfaceSubClass;
-	_Uint8t					bInterfaceProtocol;
-	_Uint8t					iInterface;
+	_Uint8t					bDescriptorType; //1
+	_Uint8t					bInterfaceNumber; //2
+	_Uint8t					bAlternateSetting; //3
+	_Uint8t					bNumEndpoints; //4
+	_Uint8t					bInterfaceClass; //5
+	_Uint8t					bInterfaceSubClass; //6
+	_Uint8t					bInterfaceProtocol; //7
+	_Uint8t					iInterface; //8
+	//9
 } usbd_interface_descriptor_t;
 
 typedef struct usbd_endpoint_descriptor {
-	_Uint8t					bLength;
-	_Uint8t					bDescriptorType;
-	_Uint8t					bEndpointAddress;
-	_Uint8t					bmAttributes;
-	_Uint16t				wMaxPacketSize;
-	_Uint8t					bInterval;
+	_Uint8t					bLength; //0
+	_Uint8t					bDescriptorType; //1
+	_Uint8t					bEndpointAddress; //2
+	_Uint8t					bmAttributes; //3
+	_Uint16t				wMaxPacketSize; //4
+	_Uint8t					bInterval; //6
+	//7
 } usbd_endpoint_descriptor_t;
 
 typedef struct usbd_audio_endpoint_descriptor {
@@ -192,6 +196,7 @@ typedef struct usbd_device_ident {
 	_Uint32t				dclass;
 	_Uint32t				subclass;
 	_Uint32t				protocol;
+	//0x14 = 20
 } usbd_device_ident_t;
 
 typedef struct usbd_device_instance {
@@ -206,35 +211,39 @@ typedef struct usbd_device_instance {
 
 typedef struct usbd_funcs {
 	_Uint32t		nentries;
-	void			(*insertion)(struct usbd_connection *, usbd_device_instance_t *instance);
-	void			(*removal)(struct usbd_connection *, usbd_device_instance_t *instance);
+	void			(*insertion)(struct usbd_connection *, usbd_device_instance_t *instance); //4
+	void			(*removal)(struct usbd_connection *, usbd_device_instance_t *instance); //8
 	void			(*event)(struct usbd_connection *, usbd_device_instance_t *instance, _Uint16t type);
+	//0x10 = 16
 } usbd_funcs_t;
 
 #define _USBDI_NFUNCS ((sizeof(usbd_funcs_t) - sizeof(_Uint32t)) / sizeof(void *))
 
 typedef struct usbd_hcd_info {
-	_Uint16t				vusb;
-	_Uint16t				vusbd;
-	char					controller[8];
-	_Uint32t				capabilities;
-	_Uint8t					ndev;				/* number of currently connected devices */
-	_Uint8t					cindex;
-	_Uint16t				vhcd;
-	_Uint32t				max_td_io;			/* max bytes per HC TD */
-	_Uint8t					_reserved[12];
+	_Uint16t				vusb; //0
+	_Uint16t				vusbd; //2
+	char					controller[8]; //4
+	_Uint32t				capabilities; //0x0c
+	_Uint8t					ndev;	//0x10			/* number of currently connected devices */
+	_Uint8t					cindex; //0x11
+	_Uint16t				vhcd; //0x12
+	_Uint32t				max_td_io;	//0x14		/* max bytes per HC TD */
+	_Uint8t					_reserved[12]; //0x18
+	//0x24
 } usbd_hcd_info_t;
 
 typedef struct usbd_port_attachment {
-	_Uint8t					upstream_devno;
-	_Uint8t					upstream_port;
-	_Uint8t					upstream_port_speed;
-	_Uint8t					upstream_hc;
-	_Uint8t					_reserved[4];
+	_Uint8t					upstream_devno; //0
+	_Uint8t					upstream_port; //1
+	_Uint8t					upstream_port_speed; //2
+	_Uint8t					upstream_hc; //3
+	_Uint8t					_reserved[4]; //4
+	//8
 } usbd_port_attachment_t;
 
 typedef struct usbd_bus_topology {
 	usbd_port_attachment_t	ports[64];
+	//0x200
 } usbd_bus_topology_t;
 
 typedef struct usbd_device_report{
@@ -266,17 +275,17 @@ typedef struct usbd_urb_isoch_stream_xfer {
 } usbd_urb_isoch_stream_xfer_t;
 
 typedef struct usbd_connect_parm {
-	const char					*path;
-	_Uint16t					vusb;
-	_Uint16t					vusbd;
-	_Uint32t					flags;
-	_Int32t						argc;
-	char						**argv;
-	_Uint32t					evtbufsz;
-	usbd_device_ident_t			*ident;
-	usbd_funcs_t				*funcs;
-	_Uint16t					connect_wait;
-	_Uint8t						evtprio;
+	const char					*path; //0
+	_Uint16t					vusb; //4
+	_Uint16t					vusbd; //6
+	_Uint32t					flags; //8
+	_Int32t						argc; //0xc
+	char						**argv; //0x10
+	_Uint32t					evtbufsz; //0x14
+	usbd_device_ident_t			*ident; //0x18
+	usbd_funcs_t				*funcs; //0x1c
+	_Uint16t					connect_wait; //0x20
+	_Uint8t						evtprio; //0x22
 	_Uint8t						_reserved[13];
 } usbd_connect_parm_t;
 
